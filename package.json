@@ -1,0 +1,20 @@
+{
+  "name": "enhanced_networking",
+  "version": "1.0.0",
+  "description": "Web Application for helping Twitter users better grow their network.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "serve": "npm run serve --workspaces --if-present",
+    "build:serve": "npm run build && npm run serve --workspaces --if-present",
+    "postinstall": "npm run build --workspaces --if-present",
+    "start": "npm run serve --workspaces --if-present"
+  },
+  "keywords": [],
+  "author": "jsldevelopment",
+  "license": "ISC",
+  "workspaces": [
+    "packages/client",
+    "packages/server"
+  ]
+}
