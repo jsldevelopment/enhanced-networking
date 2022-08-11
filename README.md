@@ -29,7 +29,11 @@ On successful login, the application will sort and filter the users contexts, de
 ### Scripts
 
 `npm run build` - builds the client and server workspaces
+
 `npm run serve` - serves the client and server on the defined port
+
 `npm run build:serve` - builds and serves the client and server on the defined port
+
 `npm run postinstall` - heroku script for building the application
+
 `npm run start` -  heroku script from running the application

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { ProfileLoading, SimpleLoading } from './common/Loading'
 import { getProfiles } from '../api/profilesApi'
 import { getTweets } from '../api/tweetApi'
-import { getUsers, followUser, blockUser } from '../api/usersApi'
+import { getUsers, blockUser } from '../api/usersApi'
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import AuthError from '../error/AuthError'
