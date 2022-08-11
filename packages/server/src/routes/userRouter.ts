@@ -62,8 +62,8 @@ router.get('/', async (req, res) => {
  router.get('/blocks/:id', async (req, res) => {
     const userId = req.session.userId || ""
     try {
-        const blocksResult = await userResource.getUserBlocks(userId, req.session.accessToken || "")
-        res.send(blocksResult)
+        await userResource.getUserBlocks(userId, req.session.accessToken || "")
+        res.sendStatus(200)
     } catch (err) {
         res.sendStatus(500)
     }

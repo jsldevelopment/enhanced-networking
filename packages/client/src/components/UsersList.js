@@ -13,7 +13,6 @@ const UsersList = (props) => {
 
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(false)
-    const [scrollPos, setScrollPos] = useState(0)
     const [initialized, setInitalized] = useState(false)
     const [entityList, setEntityList] = useState([])
     const [fetchProfiles, setFetchProfiles] = useState(false)
@@ -22,8 +21,10 @@ const UsersList = (props) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (users.length <= pageSize/2) {
-            setFetchProfiles(true)
+        if (initialized) {
+            if (users.length <= pageSize/2) {
+                setFetchProfiles(true)
+            }
         }
     }, [users])
     
@@ -31,12 +32,10 @@ const UsersList = (props) => {
     useEffect(() => {
         if (!fetchProfiles) return
         getNextPage()
-
     }, [fetchProfiles])
 
     const checkScrollPos = () => {
         const usersList = document.getElementById('users-list')
-        setScrollPos(usersList.scrollTop)
         if (usersList.scrollTop != 0) {
             if(usersList.scrollTop + usersList.clientHeight >= usersList.scrollHeight - 50) {
                 setFetchProfiles(true)
@@ -46,15 +45,15 @@ const UsersList = (props) => {
 
     const hideUser = async (id) => {
 
+        setUsers((users) => {
+            return users.filter((user) => {
+                return user.key !== id
+            })
+        })
+
         try {
             await blockUser(id)
-            setUsers((users) => {
-                return users.filter((user) => {
-                    return user.key !== id
-                })
-            })
         } catch (err) {
-            
             if (err instanceof AuthError) {
                 navigate('/login')
             } else {
@@ -156,40 +155,8 @@ export const Profile = (props) => {
     const [tweets, setTweets] = useState([])
     const profileRef = useRef(null)
 
-    const navigate = useNavigate()
-
     const toggleTweets = () => {
         setDisplayTweets(!displayTweets)
-    }
-
-    // TODO CLEAN THIS
-    const fetchFollowUser = async (id) => {
-        try {
-            const followResponse = await followUser(id)
-            if (!followResponse) props.addToast()// something went wrong toast
-            if (followResponse.following) { 
-                props.addToast("User followed.")// follow toast
-                profileRef.current.classList.add('hide-slide')
-                setTimeout(() => {
-                    props.hideUser()
-                }, 500)
-            }
-            if (followResponse.pending_follow) {
-                props.addToast("Follow request sent.")// follow request toast
-                profileRef.current.classList.add('hide-slide')
-                setTimeout(() => {
-                    props.hideUser()
-                }, 500)
-            }
-        } catch (err) {
-            
-            if (err instanceof AuthError) navigate('/login')
-            else {
-                props.addToast("Failed to follow user.")// follow request toast
-                profileRef.current.classList.add('hide-slide')
-            }
-
-        }
     }
 
     const fetchViewProfile = (username) => {
@@ -197,9 +164,9 @@ export const Profile = (props) => {
     }
 
     const hideUser = () => {
-        props.hideUser()
+        profileRef.current.classList.add('hide-slide')
         setTimeout(() => {
-            profileRef.current.classList.add('hide-slide')
+            props.hideUser()
         }, 500)
     }
 
@@ -229,9 +196,6 @@ export const Profile = (props) => {
                     </Col>
                     <Col xs="4" md="3" className="d-flex justify-content-end">
                         <Container fluid className="profile">
-                            {  MODE === "FOLLOW" && <Row className='mb-3 d-flex justify-content-end'>
-                                <Button className="btn follow-btn" onClick={ () => fetchFollowUser(props.user.id)}>Follow</Button>
-                            </Row> }
                             {  MODE === "VIEW_PROFILE" && <Row className='mb-3 d-flex justify-content-end'>
                                 <Button className="btn view-profile-btn" onClick={ () => fetchViewProfile(props.user.username)}>View Profile</Button>
                             </Row> }

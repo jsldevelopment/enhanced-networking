@@ -72,8 +72,8 @@ router.get('/follow/:id', (req, res) => __awaiter(void 0, void 0, void 0, functi
 router.get('/blocks/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.session.userId || "";
     try {
-        const blocksResult = yield userResource.getUserBlocks(userId, req.session.accessToken || "");
-        res.send(blocksResult);
+        yield userResource.getUserBlocks(userId, req.session.accessToken || "");
+        res.sendStatus(200);
     }
     catch (err) {
         res.sendStatus(500);

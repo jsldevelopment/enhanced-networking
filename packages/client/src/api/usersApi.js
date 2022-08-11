@@ -39,7 +39,11 @@ export async function blockUser(id) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
     })
-    if (response.ok) return (await response.json()).data
-    if (response.status === 403) throw new AuthError("could not authenticate user")
-    else throw new ApiError("something went wrong")
+    if (response.ok) {
+        return true
+    } else if (response.status === 403) {
+        throw new AuthError("could not authenticate user")
+    } else {
+        throw new ApiError("something went wrong")
+    }
 }
